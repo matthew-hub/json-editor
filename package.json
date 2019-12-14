@@ -1,0 +1,24 @@
+{
+  "name": "json-editor",
+  "version": "1.0.0",
+  "description": "json editor written in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthew-hub/json-editor.git"
+  },
+  "keywords": [
+    "json",
+    "editor",
+    "javascritp"
+  ],
+  "author": "matthew-hub",
+  "license": "GPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/matthew-hub/json-editor/issues"
+  },
+  "homepage": "https://github.com/matthew-hub/json-editor#readme"
+}
