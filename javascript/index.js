@@ -9,6 +9,7 @@ var json_editor = (function(root, editor) {
     }
   };
 
+  // EDITOR 
   var CreateEditor = function(id, settings) {
     this.id = id;
     this.container = this.getEditorId(id);
@@ -20,13 +21,16 @@ var json_editor = (function(root, editor) {
     this.setEditorSettings(settings);
     this.setThemeSettings();
     this.setEventListener();
+    console.log(this);
   };
 
   CreateEditor.prototype = editor.fn = {
+    // GET ELEMENT FROM PASSING ID
     getEditorId: function(id) {
       return doc.getElementById(id);
     },
 
+    // SET SETTINGS 
     setEditorSettings: function(settings) {
       console.log('[Settingss]', settings);
       this.container.style.width = settings.width || '400px';
@@ -40,11 +44,14 @@ var json_editor = (function(root, editor) {
       this.container.style.background = this.theme.workbench_color.background;
     },
 
+    // UPDATE IN THE FEATURE
     setThemeSettings: function() {
       console.log(this.renderer);
     },
 
+    // SET EVENTS "EDITOR"
     setEventListener: function() {
+      // 'FUCUSING EDITOR'
       this.container.addEventListener('click', function() {
         console.log(this.renderer.listOfCodeLines)
         console.log('focus',)
@@ -52,6 +59,7 @@ var json_editor = (function(root, editor) {
        this.renderer.listOfCodeLines[this.renderer.listOfCodeLines.length-1].style.backgroundColor = '#343232';
       }.bind(this), false);
 
+      // INPUT IN TEXAREA 
       this.renderer.fields.text_area.addEventListener('input', function(e) {
           // console.log(this.renderer.fields.text_area.value)
           // console.log(window.event.keyCode)
@@ -64,6 +72,7 @@ var json_editor = (function(root, editor) {
           this.renderer.fields.text_area.value = '';
         }.bind(this), false);
 
+      // HANDLE ALL KEYDOWN IN EDITOR
       this.container.addEventListener('keydown', function(e) {
         console.log(e.keyCode)
         var keyCode = e.keyCode || e.witch;
@@ -97,11 +106,6 @@ var json_editor = (function(root, editor) {
         //   console.log('[Value]', this.innerHTML);
       }.bind(this), false);
       
-      this.renderer.fields.editor_content.addEventListener('focus', function(e){
-        console.log(e)
-      })
-
-
     },
 
     setTextAreaValue: function(e) {
@@ -119,7 +123,7 @@ var json_editor = (function(root, editor) {
       // }
     },
 
-
+    // REMOVE ONE CHAR FROM LINE OF CODE
     removeCharFromLineOfCode: function() {
       var str = this.renderer.fields.editor_content_code[this.renderer.activeLine].textContent.slice(0, -1);
       // var newstr = str.slice(0, -1);
@@ -127,7 +131,8 @@ var json_editor = (function(root, editor) {
       this.renderer.fields.editor_content_code[this.renderer.activeLine].textContent = str;
     },
 
-
+    // 'SET' NEW LINE OF CODE
+    // USED 'RENDERER' METHOD TO CREATE NEW LINE
     setNewLineOfCode: function() {
       // this.renderer.createEditorContentLineCode();
       this.renderer.createNewLineCode();
@@ -154,6 +159,7 @@ var json_editor = (function(root, editor) {
     name: 'editor methods'
   };
 
+  // RENDERER CONSTRUCTOR
   var Renderer = function(container, settings) {
     this.container = container;
     this.settings = settings;
@@ -164,7 +170,9 @@ var json_editor = (function(root, editor) {
     // this.createEditorContentLineCode();
   };
 
+  // RENDERER PROTO METHODS
   Renderer.prototype = {
+    // CREATE ALL EDITOR RENDERER ELEMENT
     createEditorFields: function() {
       var text_area = this.createTaxtArea();
       var editor_cursor = this.createCursor();
@@ -179,7 +187,8 @@ var json_editor = (function(root, editor) {
         editor_content_code: editor_content.childNodes
       };
     },
-
+    
+    // CREATE TEXTAREA
     createTaxtArea: function() {
       var div = doc.createElement('div');
       div.className = 'editor_text_input';
@@ -216,6 +225,7 @@ var json_editor = (function(root, editor) {
       return text_area;
     },
 
+    // CREATE EDITOR CONTENT
     createEditorContent: function() {
       var editor_content = doc.createElement('div');
       editor_content.className = 'editor_content';
@@ -273,6 +283,7 @@ var json_editor = (function(root, editor) {
     //   }.bind(this))
     // },
 
+    // CREATE NEW LINE OF CODE
     createNewLineCode: function () {
       var editor_content_code = doc.createElement('div');
       editor_content_code.className = 'editor_content_line';
@@ -309,6 +320,7 @@ var json_editor = (function(root, editor) {
       this.fields.editor_content.appendChild(editor_content_code);
     },
 
+    // CREATE CURSOR
     createCursor: function () {
       var cursor = '|';
       var editor_cursor = doc.createElement('div');
@@ -333,6 +345,7 @@ var json_editor = (function(root, editor) {
 
     },
 
+    // SET CODE LINE TO ACTIVE 'CHANGE COLOR'
     setLineActiveChangeColor: function (element) {
       this.listOfCodeLines[this.activeLine].style.backgroundColor = 'transparent';
       console.log('[line]', this.listOfCodeLines[this.activeLine]);
@@ -344,6 +357,7 @@ var json_editor = (function(root, editor) {
       element.style.backgroundColor = '#343232';
     },
 
+    // FOCUS TEXT AREA WHEN CLICKED ON LINE OF CODE
     focusTextArea: function () {
       console.log('[FOCUS AREA]', );
       
