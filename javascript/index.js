@@ -137,10 +137,10 @@ var json_editor = (function(root, editor) {
     setNewLineOfCode: function() {
       // this.renderer.createEditorContentLineCode();
       this.renderer.createNewLineCode();
-      console.log(this.renderer.activeLine)
+      console.log('[ACTIVE LINE]',this.renderer.activeLine)
       // this.renderer.setLineActiveChangeColor(this.renderer.listOfCodeLines[this.renderer.activeLine += 1]);
       // this.renderer.activeLine += 1;
-      console.log(this.renderer.activeLine)
+      // console.log(this.renderer.activeLine)
       this.setActiveLine();
       this.moveTextAreaToLine();
       // console.log(this.text_area_value.length);
@@ -150,7 +150,8 @@ var json_editor = (function(root, editor) {
     },
 
     setActiveLine: function(){
-      // this.renderer.activeLine += 1;
+
+      this.renderer.activeLine 
 
     },
 
@@ -323,7 +324,8 @@ var json_editor = (function(root, editor) {
       // }.bind(this), false);
 
       // editor_content_code.textContent = this.fields.text_area.value;
-      this.listOfCodeLines.push(editor_content_code);
+      // this.listOfCodeLines.push(editor_content_code);
+      this.listOfCodeLines.splice(this.activeLine + 1, 0, editor_content_code);
     
       // APPENDCHILD WHEN FIRST TIME CREATE NEW LINE CODE
       if(this.listOfCodeLines.length <= 1 ){
@@ -333,10 +335,10 @@ var json_editor = (function(root, editor) {
         this.listOfCodeLines[this.activeLine].parentNode.insertBefore(editor_content_code, this.listOfCodeLines[this.activeLine].nextSibling)
    
       }
+      this.setLineActiveChangeColor(editor_content_code);
     
     },
-
-    // CREATE CURSOR
+// CREATE CURSOR
     createCursor: function () {
       var cursor = '|';
       var editor_cursor = doc.createElement('div');
