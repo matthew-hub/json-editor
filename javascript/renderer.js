@@ -8,6 +8,7 @@ var json_editor = (function(editor) {
     this.listOfCodeLines = [];
     this.activeLine = 0;
     this.fields = this.createEditorFields();
+    // this.fields.editor_scroll_view = this.createEditorScrollView()
     this.createNewLineCode();
     // this.createEditorContentLineCode();
   };
@@ -20,6 +21,7 @@ var json_editor = (function(editor) {
       var editor_cursor = this.createCursor();
       var editor_column_lines = this.createColumnOfLines();
       var editor_content = this.createEditorContent();
+      var editor_scroll_view = this.createEditorScrollView();
       // var editor_content_code = this.createEditorContentLineCode();
       // this.container.appendChild(editor_content);
 
@@ -27,6 +29,8 @@ var json_editor = (function(editor) {
         text_area,
         editor_content,
         editor_cursor,
+        editor_column_lines,
+        // editor_scroll_view ,
         editor_content_code: editor_content.childNodes
       };
     },
@@ -35,7 +39,8 @@ var json_editor = (function(editor) {
     createTaxtArea: function() {
       var div = doc.createElement('div');
       div.className = 'editor_text_input';
-      div.style.position = 'absolute';
+      // div.style.float = 'left';
+      // div.style.position = 'absolute';
       var text_area = doc.createElement('textarea');
       text_area.className = 'editor_textarea';
       text_area.name = 'editor-input';
@@ -72,8 +77,9 @@ var json_editor = (function(editor) {
     createEditorContent: function() {
       var editor_content = doc.createElement('div');
       editor_content.className = 'editor_content';
-      editor_content.style.width = 'auto';
-      editor_content.style.float = 'left';
+      editor_content.style.width = '100%';
+      editor_content.style.marginLeft = '100px';
+ 
       editor_content.style.height = 'auto';
       // var editor_content_code = doc.createElement('div');
       // editor_content_code.className = "editor_content_text";
@@ -133,10 +139,12 @@ var json_editor = (function(editor) {
       editor_column_lines.className = 'editor_column_lines';
       editor_column_lines.style.height = '100%';
       editor_column_lines.style.width = '100px';
-      editor_column_lines.style.float = 'left';
+      // editor_column_lines.style.clear = 'both';
+      // editor_column_lines.style.float = 'left';
       editor_column_lines.style.backgroundColor = '#212121';
       editor_column_lines.style.padding = '2px';
       this.container.appendChild(editor_column_lines);
+      return editor_column_lines;
     },
 
     // CREATE NEW LINE OF CODE
@@ -189,8 +197,13 @@ var json_editor = (function(editor) {
       this.setLineActiveChangeColor(editor_content_code);
     },
 
+
     // CREATE CURSOR
     createCursor: function() {
+      var div = doc.createElement('div');
+      div.className = 'editor_cursor_box';
+      // div.style.position = 'absolute';
+      // div.style.float = 'left';
       var cursor = '|';
       var editor_cursor = doc.createElement('div');
       editor_cursor.innerHTML = cursor;
@@ -206,11 +219,26 @@ var json_editor = (function(editor) {
       editor_cursor.style.fontSize = '20px';
       editor_cursor.style.fontWeight = 'bold';
       editor_cursor.style.pointerEvents = 'none';
+      div.appendChild(editor_cursor);
       //  editor_cursor.style.cursor = "text";
-      this.container.appendChild(editor_cursor);
+      this.container.appendChild(div);
       // setInterval(function(){
       //   console.log('cursor')
       // }, 1000);
+      return div;
+    },
+
+    // CREATE SCROLL VIEW
+
+    createEditorScrollView: function() {
+      var editor_scroll_view = doc.createElement('div');
+      editor_scroll_view.className = 'editor-scroll-view';
+      editor_scroll_view.style.display = 'block';
+      editor_scroll_view.style.width = '100%';
+      editor_scroll_view.style.height = '100%';
+      editor_scroll_view.style.position = 'relative';
+      // this.fields.editor_content.appendChild(editor_scroll_view);
+      this.container.appendChild(editor_scroll_view);
     },
 
     // SET CODE LINE TO ACTIVE 'CHANGE COLOR'
@@ -241,5 +269,5 @@ var json_editor = (function(editor) {
   };
 
   return editor;
-  
+
 })(json_editor || {});
