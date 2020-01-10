@@ -5,8 +5,9 @@ var json_editor = (function(editor) {
   var Renderer = function(container, settings) {
     this.container = container;
     this.settings = settings;
-    this.listOfCodeLines = [];
+    this.list_code_lines = [];
     this.activeLine = 0;
+    this.editor_content = this.createEditorContent();
     this.fields = this.createEditorFields();
     // this.fields.editor_scroll_view = this.createEditorScrollView()
     this.createNewLineCode();
@@ -20,32 +21,35 @@ var json_editor = (function(editor) {
       var text_area = this.createTaxtArea();
       var editor_cursor = this.createCursor();
       var editor_column_lines = this.createColumnOfLines();
-      var editor_content = this.createEditorContent();
-      var editor_scroll_view = this.createEditorScrollView();
+      // var editor_content = this.createEditorContent();
+      var editor_code_lines_c = this.createEditorCodeLinesContainer();
+      // var editor_scroll_view = this.createEditorScrollView();
+
       // var editor_content_code = this.createEditorContentLineCode();
       // this.container.appendChild(editor_content);
 
       return {
         text_area,
-        editor_content,
-        editor_cursor,
         editor_column_lines,
+        editor_cursor,
+        // editor_content,
+        editor_code_lines_c,
         // editor_scroll_view ,
-        editor_content_code: editor_content.childNodes
+        editor_code_rows: editor_code_lines_c.childNodes
       };
     },
 
     // CREATE TEXTAREA
     createTaxtArea: function() {
-      var div = doc.createElement('div');
-      div.className = 'editor_text_input';
-      // div.style.float = 'left';
-      // div.style.position = 'absolute';
+      var editor_text_input = doc.createElement('div');
+      editor_text_input.className = 'editor_text_input';
+      // editor_text_input.style.float = 'left';
+      // editor_text_input.style.position = 'absolute';
       var text_area = doc.createElement('textarea');
       text_area.className = 'editor_textarea';
       text_area.name = 'editor-input';
-      // div.innerHTML = '<textarea class="editor_textarea"> </textarea>'
-      div.appendChild(text_area);
+      // editor_text_input.innerHTML = '<textarea class="editor_textarea"> </textarea>'
+      
       // text_area.style.overflowWrap = 'normal';
       // text_area.style.boxSizing = 'inherit';
       text_area.style.position = 'absolute';
@@ -67,9 +71,8 @@ var json_editor = (function(editor) {
       // text_area.style.opacity = 0;
       text_area.style.top = '0px';
       text_area.style.color = '#ffffff';
-      // text_area.style.marginLeft = '50px';
-
-      this.container.appendChild(div);
+      editor_text_input.appendChild(text_area);
+      this.container.insertBefore(editor_text_input, this.editor_content);
       return text_area;
     },
 
@@ -78,17 +81,27 @@ var json_editor = (function(editor) {
       var editor_content = doc.createElement('div');
       editor_content.className = 'editor_content';
       editor_content.style.width = '100%';
-      editor_content.style.marginLeft = '100px';
- 
-      editor_content.style.height = 'auto';
-      // var editor_content_code = doc.createElement('div');
-      // editor_content_code.className = "editor_content_text";
-      // editor_content_code.style.padding = '2px';
-      // editor_content_code.style.height = this.settings.fontSize;
-      // console.log(this.settings)
-      // editor_content.appendChild(editor_content_code);
+      editor_content.style.height = '100%';
+      editor_content.style.overflow = 'hidden';
+      editor_content.style.display = 'block';
+      editor_content.style.position = 'relative';
       this.container.appendChild(editor_content);
+
       return editor_content;
+    },
+
+    // CREATE EDITOR CODE LINES CONTAINER
+    createEditorCodeLinesContainer: function() {
+      var editor_code_lines_c = doc.createElement('div');
+      editor_code_lines_c.className = 'editor_code_lines';
+      editor_code_lines_c.style.display = 'block';
+      editor_code_lines_c.style.position = 'relative';
+      editor_code_lines_c.style.width = 'auto';
+      editor_code_lines_c.style.height = '100%';
+      // editor_code_lines_c.style.float = 'left';
+      // editor_code_lines_c.style.overflow = 'hidden';
+      this.editor_content.appendChild(editor_code_lines_c);
+      return editor_code_lines_c;
     },
 
     // FOR TESTING
@@ -137,13 +150,19 @@ var json_editor = (function(editor) {
     createColumnOfLines: function() {
       var editor_column_lines = doc.createElement('div');
       editor_column_lines.className = 'editor_column_lines';
+      editor_column_lines.style.position = 'relative';
+      editor_column_lines.style.display = 'block';
+      editor_column_lines.style.overflow = 'hidden';
+      editor_column_lines.style.width = '70px';
       editor_column_lines.style.height = '100%';
-      editor_column_lines.style.width = '100px';
+      editor_column_lines.style.backgroundColor = '#212121';
+      editor_column_lines.style.float = 'left';
+      // editor_column_lines.style.maxWidth = '120px';
       // editor_column_lines.style.clear = 'both';
       // editor_column_lines.style.float = 'left';
-      editor_column_lines.style.backgroundColor = '#212121';
-      editor_column_lines.style.padding = '2px';
-      this.container.appendChild(editor_column_lines);
+      // editor_column_lines.style.padding = '2px';
+      // editor_column_lines.innerHTML = '1';
+      this.editor_content.appendChild(editor_column_lines);
       return editor_column_lines;
     },
 
@@ -151,14 +170,14 @@ var json_editor = (function(editor) {
     createNewLineCode: function() {
       // console.log('[CONTENT]', this.fields.editor_content);
 
-      var editor_content_code = doc.createElement('div');
-      editor_content_code.className = 'editor_code_line';
-      editor_content_code.style.padding = '2px';
-      editor_content_code.style.height = 'auto';
-      editor_content_code.style.minHeight = '22px';
-      editor_content_code.style.cursor = 'text';
+      var editor_code_line = doc.createElement('div');
+      editor_code_line.className = 'code_line';
+      // editor_code_line.style.padding = '2px';
+      editor_code_line.style.height = 'auto';
+      editor_code_line.style.minHeight = '22px';
+      editor_code_line.style.cursor = 'text';
       // editor_content_code.id = this.listOfCodeLines.length +1;
-      editor_content_code.addEventListener(
+      editor_code_line.addEventListener(
         'click',
         function(e) {
           e.stopPropagation();
@@ -185,16 +204,16 @@ var json_editor = (function(editor) {
 
       // editor_content_code.textContent = this.fields.text_area.value;
       // this.listOfCodeLines.push(editor_content_code);
-      this.listOfCodeLines.splice(this.activeLine + 1, 0, editor_content_code);
+      this.list_code_lines.splice(this.activeLine + 1, 0, editor_code_line);
 
       // APPENDCHILD WHEN FIRST TIME CREATE NEW LINE CODE
-      if (this.listOfCodeLines.length <= 1) {
-        this.fields.editor_content.appendChild(editor_content_code);
+      if (this.list_code_lines.length <= 1) {
+        this.fields.editor_code_lines_c.appendChild(editor_code_line);
       } else {
         // INSERT NEW LINE IN RIGHT PLACE
-        this.listOfCodeLines[this.activeLine].parentNode.insertBefore(editor_content_code, this.listOfCodeLines[this.activeLine].nextSibling);
+        this.list_code_lines[this.activeLine].parentNode.insertBefore(editor_code_line, this.list_code_lines[this.activeLine].nextSibling);
       }
-      this.setLineActiveChangeColor(editor_content_code);
+      this.setLineActiveChangeColor(editor_code_line);
     },
 
 
@@ -243,11 +262,10 @@ var json_editor = (function(editor) {
 
     // SET CODE LINE TO ACTIVE 'CHANGE COLOR'
     setLineActiveChangeColor: function(element) {
-      this.listOfCodeLines[this.activeLine].style.backgroundColor = 'transparent';
+      this.list_code_lines[this.activeLine].style.backgroundColor = 'transparent';
       // console.log('[line]', this.listOfCodeLines[this.activeLine]);
-
-      // console.log('list', this.listOfCodeLines)
-      this.activeLine = this.listOfCodeLines.indexOf(element);
+      // console.log('list', this.listOfCodeLines);
+      this.activeLine = this.list_code_lines.indexOf(element);
       console.log(this.activeLine);
       // element.className += ' active_line';
       element.style.backgroundColor = '#343232';

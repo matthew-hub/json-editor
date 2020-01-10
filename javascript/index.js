@@ -14,7 +14,6 @@ var json_editor = (function(root, editor) {
     this.id = id;
     this.container = this.getEditorId(id);
     this.settings = settings;
-    // this.renderer = new Renderer(this.container, this.settings);
     this.renderer = editor.renderer(this.container, this.settings);
 
     this.text_area_value = '';
@@ -39,11 +38,16 @@ var json_editor = (function(root, editor) {
       this.container.style.height = settings.height || '400px';
       this.container.style.color = '#fff';
       this.container.style.position = 'relative';
+      this.container.style.display = 'block';
+      this.container.style.boxSizing = 'border-box';
+      // this.container.style.display = 'grid';
+      // this.container.style.gridTemplateColumns = '1fr 1fr 1fr';
       // this.container.style.overflow = 'hidden'; /* * */
       this.container.style.fontSize = settings.fontSize;
       // feature, check if theme is passed
       this.theme = settings.theme || defaultTheme;
       this.container.style.background = this.theme.workbench_color.background;
+    
     },
 
     // UPDATE IN THE FEATURE
@@ -55,10 +59,10 @@ var json_editor = (function(root, editor) {
     setEventListener: function() {
       // 'FUCUSING EDITOR'
       this.container.addEventListener('click', function() {
-        console.log(this.renderer.listOfCodeLines)
+        console.log(this.renderer.list_code_lines)
         // console.log('focus',)
-      //  console.log( this.renderer.listOfCodeLines[this.renderer.listOfCodeLines.length-1]);
-       this.renderer.listOfCodeLines[this.renderer.listOfCodeLines.length-1].style.backgroundColor = '#343232';
+      //  console.log( this.renderer.list_code_lines[this.renderer.list_code_lines.length-1]);
+       this.renderer.list_code_lines[this.renderer.list_code_lines.length-1].style.backgroundColor = '#343232';
        this.renderer.focusTextArea();
       }.bind(this), false);
 
@@ -121,17 +125,18 @@ var json_editor = (function(root, editor) {
     displayTextAreaValue: function() {
       var regex = '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]\\s*(?=:)';
       // if (this.text_area_value.length > 0) {
-        this.renderer.fields.editor_content_code[this.renderer.activeLine].textContent += this.text_area_value;
-        // console.log('[editor content]', this.renderer.fields.editor_content_code[0].textContent);
+        console.log( this.renderer.fields.editor_code_rows)
+        this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent += this.text_area_value;
+        // console.log('[editor content]', this.renderer.fields.editor_code_rows[0].textContent);
       // }
     },
 
     // REMOVE ONE CHAR FROM LINE OF CODE
     removeCharFromLineOfCode: function() {
-      var str = this.renderer.fields.editor_content_code[this.renderer.activeLine].textContent.slice(0, -1);
+      var str = this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent.slice(0, -1);
       // var newstr = str.slice(0, -1);
       // console.log(newstr)
-      this.renderer.fields.editor_content_code[this.renderer.activeLine].textContent = str;
+      this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent = str;
     },
 
     // 'SET' NEW LINE OF CODE
@@ -140,7 +145,7 @@ var json_editor = (function(root, editor) {
       // this.renderer.createEditorContentLineCode();
       this.renderer.createNewLineCode();
       console.log('[ACTIVE LINE]',this.renderer.activeLine)
-      // this.renderer.setLineActiveChangeColor(this.renderer.listOfCodeLines[this.renderer.activeLine += 1]);
+      // this.renderer.setLineActiveChangeColor(this.renderer.list_code_lines[this.renderer.activeLine += 1]);
       // this.renderer.activeLine += 1;
       // console.log(this.renderer.activeLine)
       this.setActiveLine();
@@ -178,5 +183,5 @@ var json_editor = (function(root, editor) {
   };
 
   return editor;
-  
+
 })(this, json_editor || {});
