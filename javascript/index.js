@@ -21,6 +21,7 @@ var json_editor = (function(root, editor) {
   
     this.setEditorSettings(settings);
     this.setThemeSettings();
+    this.setElementStyles();
     this.setEventListener();
     console.log(this);
   };
