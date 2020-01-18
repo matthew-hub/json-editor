@@ -22,8 +22,8 @@ var json_editor = (function(editor) {
       var editor_cursor = this.createCursor();
       var editor_column_lines = this.createColumnOfLines();
       // var editor_content = this.createEditorContent();
-      var editor_code_lines_c = this.createEditorCodeLinesContainer();
-      // var editor_scroll_view = this.createEditorScrollView();
+      var editor_scroll_view = this.createEditorScrollView();
+      var editor_code_lines_c = this.createEditorCodeLinesContainer(editor_scroll_view);
 
       // var editor_content_code = this.createEditorContentLineCode();
       // this.container.appendChild(editor_content);
@@ -34,7 +34,7 @@ var json_editor = (function(editor) {
         editor_cursor,
         // editor_content,
         editor_code_lines_c,
-        // editor_scroll_view ,
+        editor_scroll_view ,
         editor_code_rows: editor_code_lines_c.childNodes
       };
     },
@@ -58,11 +58,11 @@ var json_editor = (function(editor) {
     },
 
     // CREATE EDITOR CODE LINES CONTAINER
-    createEditorCodeLinesContainer: function() {
+    createEditorCodeLinesContainer: function(el) {
       var editor_code_lines_c = doc.createElement('div');
       // editor_code_lines_c.style.float = 'left';
       // editor_code_lines_c.style.overflow = 'hidden';
-      this.editor_content.appendChild(editor_code_lines_c);
+      el.appendChild(editor_code_lines_c);
       return editor_code_lines_c;
     },
 
@@ -82,9 +82,15 @@ var json_editor = (function(editor) {
       var editor_code_line = doc.createElement('div');
       editor_code_line.className = 'code_line';
       // editor_code_line.style.padding = '2px';
-      editor_code_line.style.height = 'auto';
+      editor_code_line.style.height = '22px';
+      // editor_code_line.style.overflow = 'hidden';
+      // editor_code_line.style.textOverflow = 'ellipsis';
+      editor_code_line.style.whiteSpace = 'nowrap';
+      editor_code_line.style.display = 'inline-block'
       editor_code_line.style.minHeight = '22px';
       editor_code_line.style.cursor = 'text';
+      editor_code_line.style.width = '100%'
+      // editor_code_line.style.minWidth = '100%'
       // editor_content_code.id = this.listOfCodeLines.length +1;
       editor_code_line.addEventListener(
         'click',
@@ -145,15 +151,24 @@ var json_editor = (function(editor) {
 
     // CREATE SCROLL VIEW
 
-    createEditorScrollView: function() {
+    createEditorScrollView: function(element) {
       var editor_scroll_view = doc.createElement('div');
       editor_scroll_view.className = 'editor-scroll-view';
-      editor_scroll_view.style.display = 'block';
-      editor_scroll_view.style.width = '100%';
-      editor_scroll_view.style.height = '100%';
       editor_scroll_view.style.position = 'relative';
+      editor_scroll_view.style.display = 'block';
+      // editor_scroll_view.style.overflow = 'hidden';
+      editor_scroll_view.style.overflowY = 'scroll';
+      editor_scroll_view.style.overflowX = 'scroll';
+      editor_scroll_view.style.width = 'auto';
+      editor_scroll_view.style.height = '100%';
+      editor_scroll_view.style.minHeight = '100%';
+      // editor_scroll_view.style.top = '0'
       // this.fields.editor_content.appendChild(editor_scroll_view);
-      this.container.appendChild(editor_scroll_view);
+      // this.fields.editor_code_lines_c.appendChild(editor_scroll_view);
+      console.log('[this fields]', element);
+      // element.appendChild(editor_scroll_view)
+      this.editor_content.appendChild(editor_scroll_view);
+      return editor_scroll_view;
     },
 
     // SET CODE LINE TO ACTIVE 'CHANGE COLOR'
@@ -164,7 +179,7 @@ var json_editor = (function(editor) {
       this.activeLine = this.list_code_lines.indexOf(element);
       console.log(this.activeLine);
       // element.className += ' active_line';
-      element.style.backgroundColor = '#343232';
+      element.style.backgroundColor = '#212121';
     },
 
     // FOCUS TEXT AREA WHEN CLICKED ON LINE OF CODE

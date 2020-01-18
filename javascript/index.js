@@ -63,7 +63,7 @@ var json_editor = (function(root, editor) {
         console.log(this.renderer.list_code_lines)
         // console.log('focus',)
       //  console.log( this.renderer.list_code_lines[this.renderer.list_code_lines.length-1]);
-       this.renderer.list_code_lines[this.renderer.list_code_lines.length-1].style.backgroundColor = '#343232';
+       this.renderer.list_code_lines[this.renderer.list_code_lines.length-1].style.backgroundColor = '#212121';
        this.renderer.focusTextArea();
       }.bind(this), false);
 

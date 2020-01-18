@@ -31,17 +31,23 @@ var json_editor = (function(editor) {
     editor_content.className = 'editor_content';
     editor_content.style.width = '100%';
     editor_content.style.height = '100%';
-    editor_content.style.overflow = 'hidden';
+    // editor_content.style.overflowX = 'scroll';
+    // editor_content.style.overflowX = 'hidden';
+    // editor_content.style.overflowY = 'scroll';
     editor_content.style.display = 'block';
     editor_content.style.position = 'relative';
 
     // EDITOR CODE LINES CONTAINER
     var editor_code_lines_c = this.renderer.fields.editor_code_lines_c;
     editor_code_lines_c.className = 'editor_code_lines';
-    editor_code_lines_c.style.display = 'block';
+    editor_code_lines_c.style.display = 'inline-block';
     editor_code_lines_c.style.position = 'relative';
+    editor_code_lines_c.style.minWidth = '100%';
     editor_code_lines_c.style.width = 'auto';
-    editor_code_lines_c.style.height = '100%';
+    editor_code_lines_c.style.height = 'auto';
+    editor_code_lines_c.style.minHeight = '100%';
+    // editor_code_lines_c.style.overflowX = 'auto';
+
 
     // COLUMN OF CODE LINES
     var editor_column_lines = this.renderer.fields.editor_column_lines;
@@ -50,7 +56,8 @@ var json_editor = (function(editor) {
     editor_column_lines.style.display = 'block';
     editor_column_lines.style.overflow = 'hidden';
     editor_column_lines.style.width = '70px';
-    editor_column_lines.style.height = '100%';
+    editor_column_lines.style.minHeight = '100%';
+    editor_column_lines.style.height = 'auto';
     editor_column_lines.style.backgroundColor = '#212121';
     editor_column_lines.style.float = 'left';
   
