@@ -1,10 +1,10 @@
 var json_editor = (function(editor) {
   'use strict';
   var doc = document; // used for shorthand
-  console.log(json_editor);
+  // console.log(json_editor);
 
   editor.fn.setElementStyles = function() {
-    console.log(this.renderer.fields);
+    // console.log(this.renderer.fields);
 
     // TEXTAREA
     var text_area = this.renderer.fields.text_area;
@@ -34,6 +34,7 @@ var json_editor = (function(editor) {
     // editor_content.style.overflowX = 'scroll';
     // editor_content.style.overflowX = 'hidden';
     // editor_content.style.overflowY = 'scroll';
+    // editor_content.style.overflow = 'hidden';
     editor_content.style.display = 'block';
     editor_content.style.position = 'relative';
 
@@ -76,6 +77,56 @@ var json_editor = (function(editor) {
     editor_cursor.style.fontSize = '20px';
     editor_cursor.style.fontWeight = 'bold';
     editor_cursor.style.pointerEvents = 'none';
+
+    // EDITOR SCROLL VIEW
+    var editor_scroll_view = this.renderer.fields.editor_scroll_view;
+    editor_scroll_view.className = 'editor-scroll-view';
+    editor_scroll_view.style.position = 'relative';
+    editor_scroll_view.style.display = 'block';
+    editor_scroll_view.style.overflow = 'hidden';
+    // editor_scroll_view.style.overflowY = 'scroll'; // now disbale
+    // editor_scroll_view.style.overflowX = 'scroll'; // now disable
+    editor_scroll_view.style.width = 'auto';
+    editor_scroll_view.style.height = '100%';
+    editor_scroll_view.style.minHeight = '100%';
+
+    // EDITOR SCROLLBARS
+    var editor_scrollbar_y = this.renderer.fields.editor_scrollbar_y;
+    editor_scrollbar_y.style.position = 'absolute';
+    editor_scrollbar_y.style.top = 0;
+    editor_scrollbar_y.style.right = 0;
+    editor_scrollbar_y.style.height = '100%';
+    editor_scrollbar_y.style.width = '20px';
+    // editor_scrollbar_y.style.backgroundColor = "#282828";
+    editor_scrollbar_y.style.borderLeft = '1px solid #454545';
+    // console.log('[scroll-y]', this.renderer.fields.editor_scrollbar_y.children );
+    
+    // EDITOR SCROLLBARS TUMB
+    var editor_scrollbar_thumb = [this.renderer.fields.editor_scrollbar_y.children[0], this.renderer.fields.editor_scrollbar_x.children[0]];
+ 
+    editor_scrollbar_thumb[0].style.width = '100%';
+    editor_scrollbar_thumb[0].style.backgroundColor = '#313131';
+    
+    var editor_scrollbar_x = this.renderer.fields.editor_scrollbar_x;
+    editor_scrollbar_x.style.position = 'absolute';
+    editor_scrollbar_x.style.bottom = 0;
+    editor_scrollbar_x.style.right = 0;
+    editor_scrollbar_x.style.height = '20px';
+    editor_scrollbar_x.style.width = '100%';
+    // editor_scrollbar_h.style.backgroundColor = "#282828";
+    editor_scrollbar_x.style.borderTop = '1px solid #454545';
+    
+    // console.log('[style]', this.renderer.fields);
+    
+    editor_scrollbar_thumb[1].style.height = '100%';
+    editor_scrollbar_thumb[1].style.display = 'block';
+    editor_scrollbar_thumb[1].style.width = '120px';
+    editor_scrollbar_thumb[1].style.backgroundColor = '#313131';
+
+    ////////////////////////////////////////////////////////////
+
+
+
   };
 
   return editor;
