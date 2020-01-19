@@ -9,7 +9,7 @@ var json_editor = (function(root, editor) {
     }
   };
 
-  // EDITOR 
+  // EDITOR
   var CreateEditor = function(id, settings) {
     this.id = id;
     this.container = this.getEditorId(id);
@@ -22,7 +22,9 @@ var json_editor = (function(root, editor) {
     this.setEditorSettings(settings);
     this.setThemeSettings();
     this.setElementStyles();
-    this.setEventListener();
+    this.setScrollbarsThumb();
+    // this.setEventListener();
+    this.setEventsListener();
     console.log(this);
   };
 
@@ -32,7 +34,7 @@ var json_editor = (function(root, editor) {
       return doc.getElementById(id);
     },
 
-    // SET SETTINGS 
+    // SET SETTINGS
     setEditorSettings: function(settings) {
       console.log('[Settingss]', settings);
       this.container.style.width = settings.width || '400px';
@@ -44,11 +46,11 @@ var json_editor = (function(root, editor) {
       // this.container.style.display = 'grid';
       // this.container.style.gridTemplateColumns = '1fr 1fr 1fr';
       // this.container.style.overflow = 'hidden'; /* * */
-      this.container.style.fontSize = settings.fontSize;
+      this.container.style.fontSize = settings.fontSize || '15px';
+      this.container.style.fontFamily = 'Consolas, Courier New, monospace';
       // feature, check if theme is passed
       this.theme = settings.theme || defaultTheme;
       this.container.style.background = this.theme.workbench_color.background;
-    
     },
 
     // UPDATE IN THE FEATURE
@@ -56,69 +58,15 @@ var json_editor = (function(root, editor) {
       console.log(this.renderer);
     },
 
-    // SET EVENTS "EDITOR"
+    // SET EVENTS LISTENER "EDITOR"
     setEventListener: function() {
-      // 'FUCUSING EDITOR'
-      this.container.addEventListener('click', function() {
-        console.log(this.renderer.list_code_lines)
-        // console.log('focus',)
-      //  console.log( this.renderer.list_code_lines[this.renderer.list_code_lines.length-1]);
-       this.renderer.list_code_lines[this.renderer.list_code_lines.length-1].style.backgroundColor = '#212121';
-       this.renderer.focusTextArea();
-      }.bind(this), false);
+     
 
-      // INPUT IN TEXAREA 
-      this.renderer.fields.text_area.addEventListener('input', function(e) {
-          // console.log(this.renderer.fields.text_area.value)
-          // console.log(window.event.keyCode)
-          // console.log(this.value)
-        console.log('input')
-        this.setTextAreaValue();
-          // this.setNewLineOfCode();
-        this.displayTextAreaValue();
-        this.text_area_value = '';
-          this.renderer.fields.text_area.value = '';
-        }.bind(this), false);
-
-      // HANDLE ALL KEYDOWN IN EDITOR
-      this.container.addEventListener('keydown', function(e) {
-        console.log(e.keyCode)
-        var keyCode = e.keyCode || e.witch;
-        if (keyCode === 13) {
-          e.preventDefault(); 
-          console.log('[ENTER]');
-          this.setNewLineOfCode();
-        }
-
-        if (keyCode == 9) { 
-          e.preventDefault(); 
-          console.log('[Tab]', );
-           
-        } 
-
-        if(keyCode === 8){
-          e.preventDefault();
-          console.log('[Backspace]');
-          this.removeCharFromLineOfCode();
-
-        }
-
-        if(e.ctrlKey){
-          if(keyCode === 65){
-            console.log('[SELECT ALL]', );
-            
-          }
-        }
-        // console.log(e)
-        // e.preventDefault();
-        //   console.log('[Value]', this.innerHTML);
-      }.bind(this), false);
-      
     },
 
     setTextAreaValue: function(e) {
-      console.log(this.renderer.fields.text_area.value);
-      this.text_area_value += this.renderer.fields.text_area.value;
+      console.log(this.renderer.elements.text_area.value);
+      this.text_area_value += this.renderer.elements.text_area.value;
     },
 
     checkTextAreaValue: function() {},
@@ -126,18 +74,18 @@ var json_editor = (function(root, editor) {
     displayTextAreaValue: function() {
       var regex = '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]\\s*(?=:)';
       // if (this.text_area_value.length > 0) {
-        console.log( this.renderer.fields.editor_code_rows)
-        this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent += this.text_area_value;
-        // console.log('[editor content]', this.renderer.fields.editor_code_rows[0].textContent);
+      console.log(this.renderer.elements.editor_code_rows);
+      this.renderer.elements.editor_code_rows[this.renderer.activeLine].textContent += this.text_area_value;
+      // console.log('[editor content]', this.renderer.elements.editor_code_rows[0].textContent);
       // }
     },
 
     // REMOVE ONE CHAR FROM LINE OF CODE
     removeCharFromLineOfCode: function() {
-      var str = this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent.slice(0, -1);
+      var str = this.renderer.elements.editor_code_rows[this.renderer.activeLine].textContent.slice(0, -1);
       // var newstr = str.slice(0, -1);
       // console.log(newstr)
-      this.renderer.fields.editor_code_rows[this.renderer.activeLine].textContent = str;
+      this.renderer.elements.editor_code_rows[this.renderer.activeLine].textContent = str;
     },
 
     // 'SET' NEW LINE OF CODE
@@ -145,7 +93,7 @@ var json_editor = (function(root, editor) {
     setNewLineOfCode: function() {
       // this.renderer.createEditorContentLineCode();
       this.renderer.createNewLineCode();
-      console.log('[ACTIVE LINE]',this.renderer.activeLine)
+      console.log('[ACTIVE LINE]', this.renderer.activeLine);
       // this.renderer.setLineActiveChangeColor(this.renderer.list_code_lines[this.renderer.activeLine += 1]);
       // this.renderer.activeLine += 1;
       // console.log(this.renderer.activeLine)
@@ -157,32 +105,65 @@ var json_editor = (function(root, editor) {
       // }
     },
 
-    setActiveLine: function(){
-
-      this.renderer.activeLine 
+    moveContentWithScrollbars: function(){
 
     },
 
-    moveTextAreaToLine: function(){
-      console.log('[TOP AREA]', parseInt(this.renderer.fields.text_area.style.top, 10));
-      
-      // this.renderer.fields.text_area.style.top = parseInt(this.renderer.fields.text_area.style.top, 10) + 20 + 'px';
-      // console.log('[textarea]', this.renderer.fields.text_area);
-      
+    setActiveLine: function() {
+      this.renderer.activeLine;
+    },
+
+    moveTextAreaToLine: function() {
+      console.log('[TOP AREA]', parseInt(this.renderer.elements.text_area.style.top, 10));
+
+      // this.renderer.elements.text_area.style.top = parseInt(this.renderer.elements.text_area.style.top, 10) + 20 + 'px';
+      // console.log('[textarea]', this.renderer.elements.text_area);
+    },
+
+    // SET SCROLLBARS THUMBS CURRENT WIDTH, HEIGHT, EVENTS
+    setScrollbarsThumb: function() {
+      var editor_scrollbar_thumb = [
+        this.renderer.elements.editor_scrollbar_y.children[0],
+        this.renderer.elements.editor_scrollbar_x.children[0]
+      ];
+      console.log('[thumbs]', editor_scrollbar_thumb);
+      // for y scrollbar
+      // get editor scroll view height
+      // get editor code lines height
+      // set thumb height
+      // move editor code lines with scrollbar thumb
+
+      var editor_scroll_view_height = this.renderer.elements.editor_scroll_view.offsetHeight;
+      console.log('[editor scroll view height]:', editor_scroll_view_height, 'px');
+      console.log('[editor content width]:', this.renderer.editor_content.offsetWidth, 'px');
+
+      var editor_code_lines_c_height = this.renderer.elements.editor_code_lines_c.offsetHeight;
+      console.log('[editor code lines height]:', editor_code_lines_c_height, 'px');
+      var editor_code_lines_c_margin_top = this.renderer.elements.editor_code_lines_c.style.marginTop;
+      console.log('[Margin top]', editor_code_lines_c_margin_top);
+
+      editor_scrollbar_thumb[0].style.height =
+        Math.floor((editor_scroll_view_height / editor_code_lines_c_height) * editor_scroll_view_height) + 'px';
+      // var c = 0 / b;
+      // console.log('c', c)
+
+      console.log('[scroll result]', editor_scrollbar_thumb[0].style.height);
+
+      window.onresize = function() {
+        console.log('[window resize]');
+        console.log('[editor code lines height]:', this.renderer.elements.editor_code_lines_c.offsetHeight, 'px');
+      }.bind(this);
     },
 
     length: 0,
     name: 'editor methods'
   };
 
-
   editor.new = function(id, settings) {
-    window.addEventListener('DOMContentLoaded', function(){
-      
+    window.addEventListener('DOMContentLoaded', function() {
       return new CreateEditor(id, settings);
-    })
+    });
   };
 
   return editor;
-
 })(this, json_editor || {});
